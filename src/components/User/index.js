@@ -5,10 +5,26 @@ export default function User(props) {
   const {data} = props;
   console.log('user user', data);
   return (
-    Object.values(data).map((item, index) => {
-      return (
-          <div>{item['hh']} : {item['mm']}</div>
-      )
-    })
+    <div>
+      <table>
+         <thead>
+         <tr>
+           <th>
+             HH
+           </th>
+           <th>
+             MM
+           </th>
+         </tr>
+         </thead>
+         {Object.values(data).map((item, index) => {
+            return (<tr>
+              <td>{item['hh']}</td>
+              <td>{item["mm"]}</td>
+            </tr>)})
+          }
+       </table> 
+    </div>
+    
   )
 }

@@ -7,16 +7,14 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Admin from './components/Admin';
 import User from './components/User';
+import Role from './components/Role';
 
 function App() {
 
   const [role, setRole] = useState('admin');
   const [persistedData, setPersistedData] = useState(JSON.parse(localStorage.getItem('data')))
-  // const d = {0: {'hh': '23', 'mm': '45'}};
-  // localStorage.setItem('data', JSON.stringify(d));
 
   const addData = (newData) => {
-    console.log("add data", newData);
     const index = Object.keys(persistedData).length;
     const updatedPersistedData = {...persistedData};
     updatedPersistedData[index] = newData;
@@ -40,10 +38,17 @@ useEffect (() => {
     },
   );
 
+  const getRoleUI = () => {
+    return (role === 'admin' 
+    ? <Admin data={persistedData} addData={addData} updateData={updateData}/> 
+    : <User data={persistedData}/>)
+  }
+
   return (
     <div className="App">
-      <FormControl>
-        <FormLabel>Select Role</FormLabel>
+      <div className='display-container'>
+      <FormControl className='form'>
+        <FormLabel className='form-label'>Select Role</FormLabel>
           <RadioGroup
             row={true}
             name="radio-buttons-group"
@@ -54,9 +59,9 @@ useEffect (() => {
             <FormControlLabel value="user" control={<Radio />} label="User" />
           </RadioGroup>
       </FormControl>
-        {role === 'admin' 
-        ? <Admin data={persistedData} addData={addData} updateData={updateData}/> 
-        : <User data={persistedData}/>}
+        {/* {getRoleUI()} */}
+        <Role role={role} data={persistedData} addData={addData} updateData={updateData}/>
+      </div>
     </div>
   );
 }
