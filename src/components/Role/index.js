@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Admin from '../Admin';
 import User from '../User';
-// import './User.css';
 
 export default function Role(props) {
   const {role, data, addData, updateData} = props;
@@ -14,10 +13,6 @@ export default function Role(props) {
       return <User data={data}/>
     }
   }
-
-  // useEffect(() => {
-  //   console.log('Role use effect', data);
-  // },[data]);
 
   return (
     <div>

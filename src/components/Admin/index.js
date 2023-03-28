@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { TextField, IconButton, Button, useMediaQuery} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import './Admin.css';
-import { getDisplayName } from '@mui/utils';
+import { TextField, IconButton, Button, useMediaQuery} from '@mui/material';
 
 export default function Admin(props) {
   const {data, addData, updateData} = props;
-  console.log("Admin Admin", data);
   const [localData, setLocalData] = useState(data);
   const [isEditingAllowed, setIsEditingAllowed] = useState(false);
   const [addNewValue, setAddNewValue] = useState({});
-  const [temp, setTemp] = useState({});
 
   const removeItem = (index) => {
     const updatedLocalData = {...localData};
@@ -24,18 +20,12 @@ export default function Admin(props) {
   },[data]);
 
   const update = () => {
-    if(isEditingAllowed) {
-      updateData(temp);
-    } else {
-      setTemp(localData);
-    }
     setIsEditingAllowed(!isEditingAllowed);
+    updateData(localData);
   }
-
 
   const cancel = () => {
     setIsEditingAllowed(!isEditingAllowed);
-    console.log("cancel ", data);
     setLocalData(data);
   }
 
@@ -48,10 +38,9 @@ export default function Admin(props) {
   }
   
   const handleInputChange = (index, key, value) => {
-    console.log('handleInputChange', data);
-    const updatedLocalData = {...temp};
-    updatedLocalData[index][key] = value;
-    setTemp(updatedLocalData);
+    const updatedLocalData = {...localData};
+    updatedLocalData[index][key] = parseInt(value, 10);
+    setLocalData(updatedLocalData);
   }
 
   const handleAddNewElementChange = (key, val) => {
@@ -63,11 +52,6 @@ export default function Admin(props) {
     }
     setAddNewValue(newData);
   }
-
-  const isMobile = !(
-    useMediaQuery('(min-width:768px)', { noSsr: true }) &&
-    window.screen.height < window.screen.width
-  );
 
   const displayTable = () => {
     return (
@@ -97,62 +81,65 @@ export default function Admin(props) {
 
   const getInputTable = () => {
     console.log("local data, data", localData, data);
-    return (Object.keys(temp).map((element) => {
-      // let item = temp[element];
-      // let index = element;
+    return (Object.keys(localData).map((element) => {
+      let item = localData[element];
+      let index = element;
       return (
-        <div  style={{marginBottom: '0.5em'}} id={element}>
+        <div  style={{marginBottom: '0.5em'}} id={index}>
           <TextField
           sx={{width: '30%' , marginRight: '0.75em', marginLeft: '0.5em'}} 
-          value={temp[element]['hh']} 
+          value={item['hh']} 
           size={'small'} 
           type={'number'}
           required={true} 
           disabled={!isEditingAllowed}
-          onChange={(e) => {handleInputChange(element, 'hh', e.target.value)}}/>
+          onChange={(e) => {handleInputChange(index, 'hh', e.target.value)}}/>
           <TextField 
           sx={{width: '30%', marginRight: '0.75em', marginLeft: '0.5em'}}
-          value={temp[element]['mm']} 
+          value={item['mm']} 
           size={'small'} 
           type={'number'} 
           required={true} 
           disabled={!isEditingAllowed}
-          onChange={(e) => {handleInputChange(element, 'mm', e.target.value)}}/>
-          {isEditingAllowed && <Button onClick={() => {console.log("remove", element);
-        removeItem(element)}}>Remove</Button>}
+          onChange={(e) => {handleInputChange(index, 'mm', e.target.value)}}/>
+          {isEditingAllowed && <Button onClick={() => {console.log("remove", index);
+        removeItem(index)}}>Remove</Button>}
         </div>
       )
     }))
   }
 
+  const isMobile = !(
+    useMediaQuery('(min-width:768px)', { noSsr: true }) &&
+    window.screen.height < window.screen.width
+  );
+
   return (
     <div className='admin-container'>
       <div className='admin'>
-        <div className='admin-input'>
-        <TextField
-            sx={{marginRight: '1em', width: isMobile ? '30%': '100%'}} 
-            size={'small'} 
-            type={'number'}
-            value={addNewValue['hh']}
-            required={true} 
-            placeholder={'HH'}
-            onChange={(e) => {handleAddNewElementChange('hh', e.target.value)}}/>
-            <TextField
-            sx={{marginRight: '1em', width: isMobile ? '30%': '100%'}}
-            size={'small'} 
-            type={'number'} 
-            value={addNewValue['mm']}
-            placeholder={'MM'}
-            required={true} 
-            onChange={(e) => {handleAddNewElementChange('mm', e.target.value)}}/>
-        </div>
-        <Button disableRipple={true} onClick={() => {addItem()}}>Add</Button>
+      <div className='admin-input'>
+      <TextField
+        sx={{marginRight: '1em', width: isMobile ? '30%': '100%'}} 
+        size={'small'} 
+        type={'number'}
+        value={addNewValue['hh']}
+        required={true} 
+        placeholder={'HH'}
+        onChange={(e) => {handleAddNewElementChange('hh', e.target.value)}}/>
+      <TextField
+        sx={{marginRight: '1em', width: isMobile ? '30%': '100%'}}
+        size={'small'} 
+        type={'number'} 
+        value={addNewValue['mm']}
+        placeholder={'MM'}
+        required={true} 
+        onChange={(e) => {handleAddNewElementChange('mm', e.target.value)}}/>
+      <Button disableRipple={true} onClick={() => {addItem()}}>Add</Button>
       </div>
       {isEditingAllowed ? getInputTable() : displayTable()}
-      <div className='button'>
       <Button onClick={() => {update()}}>Update</Button>
       {isEditingAllowed && <Button onClick={() => {cancel()}}>Cancel</Button>}
-      </div> 
+      </div>
   </div>
   )
 }

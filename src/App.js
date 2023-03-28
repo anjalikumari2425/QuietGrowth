@@ -10,9 +10,12 @@ import User from './components/User';
 import Role from './components/Role';
 
 function App() {
-
+  const initialData = JSON.parse(localStorage.getItem('data'));
+  if(!initialData) {
+    localStorage.setItem('data', JSON.stringify({}));
+  }
   const [role, setRole] = useState('admin');
-  const [persistedData, setPersistedData] = useState(JSON.parse(localStorage.getItem('data')))
+  const [persistedData, setPersistedData] = useState(JSON.parse(localStorage.getItem('data')));
 
   const addData = (newData) => {
     const index = Object.keys(persistedData).length;
