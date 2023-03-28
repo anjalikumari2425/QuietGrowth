@@ -30,14 +30,9 @@ function App() {
     setPersistedData(newData);
   };
 
-useEffect (() => {
-  console.log("added", persistedData);
-},[persistedData]);
-
   const onChangeWrapper = useCallback(
     (_, newValue) => {
       setRole(newValue);
-      console.log(newValue);
     },
   );
 

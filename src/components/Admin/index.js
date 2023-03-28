@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Admin.css';
-import { TextField, IconButton, Button, useMediaQuery} from '@mui/material';
+import { TextField, Button, useMediaQuery} from '@mui/material';
 
 export default function Admin(props) {
   const {data, addData, updateData} = props;
@@ -15,7 +15,6 @@ export default function Admin(props) {
   }
 
   useEffect (() => {
-    console.log("useEffect", data);
     setLocalData(data);
   },[data]);
 
@@ -30,7 +29,6 @@ export default function Admin(props) {
   }
 
   const addItem = () => {
-    console.log("local add item", addNewValue);
     if(Object.keys(addNewValue).length !== 0 && addNewValue['hh'] !== '' && addNewValue['mm'] !== '') {
       addData(addNewValue);
       setAddNewValue({'hh':'', 'mm':''});
@@ -39,7 +37,11 @@ export default function Admin(props) {
   
   const handleInputChange = (index, key, value) => {
     const updatedLocalData = {...localData};
-    updatedLocalData[index][key] = parseInt(value, 10);
+    if (key === 'hh' && /^\d*$/.test(value) && value <= 23) {
+      updatedLocalData[index][key] = parseInt(value, 10);
+    } else if(key === 'mm' && /^\d*$/.test(value) && value <= 59) {
+      updatedLocalData[index][key] = parseInt(value, 10);
+    }
     setLocalData(updatedLocalData);
   }
 
@@ -80,7 +82,6 @@ export default function Admin(props) {
   }
 
   const getInputTable = () => {
-    console.log("local data, data", localData, data);
     return (Object.keys(localData).map((element) => {
       let item = localData[element];
       let index = element;
@@ -102,8 +103,7 @@ export default function Admin(props) {
           required={true} 
           disabled={!isEditingAllowed}
           onChange={(e) => {handleInputChange(index, 'mm', e.target.value)}}/>
-          {isEditingAllowed && <Button onClick={() => {console.log("remove", index);
-        removeItem(index)}}>Remove</Button>}
+          {isEditingAllowed && <Button onClick={() => {removeItem(index)}}>Remove</Button>}
         </div>
       )
     }))

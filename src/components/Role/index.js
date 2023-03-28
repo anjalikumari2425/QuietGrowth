@@ -4,7 +4,6 @@ import User from '../User';
 
 export default function Role(props) {
   const {role, data, addData, updateData} = props;
-  console.log("role role", data);
 
   const getRoleUI = () => {
     if(role === 'admin') {

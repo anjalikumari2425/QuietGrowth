@@ -3,7 +3,6 @@ import './User.css';
 
 export default function User(props) {
   const {data} = props;
-  console.log('user user', data);
   return (
     <div>
       <table>
