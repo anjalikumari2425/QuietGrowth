@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import './App.css';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import Admin from './components/Admin';
-import User from './components/User';
 import Role from './components/Role';
 
 function App() {
@@ -36,12 +34,6 @@ function App() {
     },
   );
 
-  const getRoleUI = () => {
-    return (role === 'admin' 
-    ? <Admin data={persistedData} addData={addData} updateData={updateData}/> 
-    : <User data={persistedData}/>)
-  }
-
   return (
     <div className="App">
       <div className='display-container'>
@@ -57,7 +49,6 @@ function App() {
             <FormControlLabel value="user" control={<Radio />} label="User" />
           </RadioGroup>
       </FormControl>
-        {/* {getRoleUI()} */}
         <Role role={role} data={persistedData} addData={addData} updateData={updateData}/>
       </div>
     </div>
